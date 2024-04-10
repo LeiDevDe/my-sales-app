@@ -24,10 +24,22 @@ import { CategoryFormComponent } from './form/form.component';
     CategoryFormComponent]
 })
 export class CategoriesComponent implements AfterViewInit {
+
+  onSave(category: Category) {
+    console.log("Save Category in the CategoriesComponent", category)
+  }
+
+  hideCategoryForm() {
+    this.showForm = false;
+    this.loadCategories();
+  }
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatTable) table!: MatTable<CategoriesItem>;
   dataSource = new MatTableDataSource<Category>();
+
+  showForm: Boolean = false;
 
   constructor(private categoryService: CategoryService) { }
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
@@ -46,4 +58,10 @@ export class CategoriesComponent implements AfterViewInit {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
+
+  onNewCategoryClick() {
+    console.log("button is clicked")
+    this.showForm = true;
+  };
+
 }

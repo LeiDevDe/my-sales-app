@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableModule, MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatSortModule, MatSort } from '@angular/material/sort';
@@ -29,14 +29,10 @@ import { LoadingBarComponent } from '../loading-bar.component';
     LoadingBarComponent]
 })
 export class CategoriesComponent implements AfterViewInit {
-  async onDeleteCategoryClick(category: Category) {
-    if (confirm(`Delete "${category.name}" with id ${category.id}`)) {
-      await lastValueFrom(this.categoryService.delete(category.id))
-      this.loadCategories();
-    }
-  }
 
 
+
+  showLoading: Boolean = false;
   category!: Category;
 
   async onSave(category: Category) {
@@ -58,6 +54,7 @@ export class CategoriesComponent implements AfterViewInit {
   showForm: Boolean = false;
 
   constructor(private categoryService: CategoryService) { }
+
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['id', 'name', 'description', 'actions'];
 
@@ -68,11 +65,23 @@ export class CategoriesComponent implements AfterViewInit {
     this.loadCategories();
   }
   async loadCategories(): Promise<void> {
+    this.showLoading = true;
     const categories = await lastValueFrom(this.categoryService.getAll());
     this.dataSource = new MatTableDataSource(categories);
     this.table.dataSource = this.dataSource;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.showLoading = false
+  }
+
+  async onDeleteCategoryClick(category: Category) {
+    if (confirm(`Delete "${category.name}" with id ${category.id}`)) {
+      this.showLoading = true;
+      await lastValueFrom(this.categoryService.delete(category.id))
+      this.showLoading = false;
+      this.loadCategories();
+
+    }
   }
 
   onNewCategoryClick() {
@@ -90,5 +99,6 @@ export class CategoriesComponent implements AfterViewInit {
     this.category = category;
     this.showForm = true;
   }
+
 
 }

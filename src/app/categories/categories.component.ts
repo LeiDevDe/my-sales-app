@@ -8,6 +8,9 @@ import { Category } from './category.dto';
 import { CategoryService } from './category.service';
 import { lastValueFrom } from 'rxjs';
 import { CategoryFormComponent } from './form/form.component';
+import { MatIconModule } from '@angular/material/icon';
+import { LoadingBarComponent } from '../loading-bar.component';
+
 
 @Component({
   selector: 'app-categories',
@@ -21,12 +24,25 @@ import { CategoryFormComponent } from './form/form.component';
   standalone: true,
   imports: [MatTableModule, MatPaginatorModule, MatSortModule,
     MatCardModule,
-    CategoryFormComponent]
+    MatIconModule,
+    CategoryFormComponent,
+    LoadingBarComponent]
 })
 export class CategoriesComponent implements AfterViewInit {
+  async onDeleteCategoryClick(category: Category) {
+    if (confirm(`Delete "${category.name}" with id ${category.id}`)) {
+      await lastValueFrom(this.categoryService.delete(category.id))
+      this.loadCategories();
+    }
+  }
 
-  onSave(category: Category) {
+
+  category!: Category;
+
+  async onSave(category: Category) {
+    const saved = lastValueFrom(this.categoryService.save(category));
     console.log("Save Category in the CategoriesComponent", category)
+    this.hideCategoryForm();
   }
 
   hideCategoryForm() {
@@ -43,7 +59,7 @@ export class CategoriesComponent implements AfterViewInit {
 
   constructor(private categoryService: CategoryService) { }
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name', 'description'];
+  displayedColumns = ['id', 'name', 'description', 'actions'];
 
   ngAfterViewInit(): void {
     // this.dataSource.sort = this.sort;
@@ -61,7 +77,18 @@ export class CategoriesComponent implements AfterViewInit {
 
   onNewCategoryClick() {
     console.log("button is clicked")
+    this.category = {
+      id: 0,
+      name: "",
+      description: ""
+    }
     this.showForm = true;
+
   };
+  onEditCategoryClick(category: Category) {
+    console.log("edit category", category)
+    this.category = category;
+    this.showForm = true;
+  }
 
 }

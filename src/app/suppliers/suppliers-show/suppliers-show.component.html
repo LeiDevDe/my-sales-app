@@ -1,0 +1,38 @@
+@if(supplierObservable|async){
+<mat-card-content>
+    <mat-card-subtitle></mat-card-subtitle>
+    <h3>{{supplier.contactName}}</h3>
+    <div>{{supplier.companyName}}</div>
+    <br /><br />
+    <div>
+        <dl>
+            <dt>street</dt>
+            <dd>{{supplier.address?.street}}</dd>
+        </dl>
+        <dl>
+            <dt>Location</dt>
+            <dd>{{supplier.address?.city}}, {{supplier.address?.region}} -
+                {{supplier.address?.country}}</dd>
+        </dl>
+        <dl>
+            <dt>PO Box</dt>
+            <dd>{{supplier.address?.postalCode}}</dd>
+        </dl>
+        <dl>
+            <dt>phone</dt>
+            <dd>{{supplier.address?.phone}}</dd>
+        </dl>
+
+    </div>
+</mat-card-content>
+<mat-card-actions>
+    <button mat-button [routerLink]="['/suppliers']">Back</button>
+    <div class="width-full">
+    </div>
+    <button mat-raised-button color="primary" [routerLink]="['/suppliers/edit/', supplier.id]">
+        Edit</button>
+    <button mat-button [routerLink]="['/suppliers/del', supplier.id]">Delete</button>
+</mat-card-actions>
+}@else {
+<loading-bar></loading-bar>
+}

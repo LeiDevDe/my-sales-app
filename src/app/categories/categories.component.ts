@@ -1,14 +1,14 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableModule, MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatSortModule, MatSort } from '@angular/material/sort';
-import { CategoriesItem } from './categories-datasource';
+import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { CategoriesItem } from './categories-datasource';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { Category } from './category.dto';
 import { CategoryService } from './category.service';
 import { lastValueFrom } from 'rxjs';
 import { CategoryFormComponent } from './form/form.component';
-import { MatIconModule } from '@angular/material/icon';
 import { LoadingBarComponent } from '../loading-bar.component';
 
 
